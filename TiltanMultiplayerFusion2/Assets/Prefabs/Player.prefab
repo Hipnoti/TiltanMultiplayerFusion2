@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 4710094288369997582}
   - component: {fileID: 2639827463125215921}
   - component: {fileID: 4724552157481653909}
-  - component: {fileID: 3514581098245121579}
+  - component: {fileID: 1706210447419870186}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -138,9 +138,9 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 3514581098245121579}
+  - {fileID: 1706210447419870186}
   ForceRemoteRenderTimeframe: 0
---- !u!114 &3514581098245121579
+--- !u!114 &1706210447419870186
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,7 +155,7 @@ MonoBehaviour:
   _stateAuthorityChangeErrorCorrectionDelta: 0
   SyncScale: 0
   SyncParent: 0
-  _autoAOIOverride: 0
+  _autoAOIOverride: 1
   DisableSharedModeInterpolation: 0
 --- !u!1001 &11049399764920155
 PrefabInstance:
