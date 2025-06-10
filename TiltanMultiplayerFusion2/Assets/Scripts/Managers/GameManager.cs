@@ -7,13 +7,20 @@ using Random = UnityEngine.Random;
 
 public class GameManager : NetworkBehaviour
 {
+    public static GameManager Instance;
+    public Camera mainCamera;
     private NetworkRunner networkRunner;
     public GameObject playerPrefab;
     public Transform playerSpawnPoint;
     
     public SpawnPoint[] twoPlayerSpawnPoints;
     public SpawnPoint[] sixPlayerSpawnPoints;
-    
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         networkRunner = NetworkRunner.GetRunnerForScene(SceneManager.GetActiveScene()); 

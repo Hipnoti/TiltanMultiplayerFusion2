@@ -12,8 +12,8 @@ public class ReadyManager : NetworkBehaviour
     {
         Debug.Log($"Player id {info.Source.PlayerId} is ready");
         readyCounter++;
-        if(readyCounter >= 2)
-            onReadyCounterReachedMax?.Invoke();
+        // if(readyCounter >= 2)
+             onReadyCounterReachedMax?.Invoke();
             
     }
 
