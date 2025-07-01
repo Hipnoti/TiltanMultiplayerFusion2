@@ -40,6 +40,8 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         endSessionButton.interactable = false;
         startMatchButton.interactable = false;
         sendReadyButton.interactable = false;
+            //        networkRunnerInstance.Spawn()
+      
 #endif
     }
 
@@ -53,7 +55,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
-            OnGameStarted = OnGameStarted
+            OnGameStarted = OnGameStarted,
         });
 
         if (startGameResult.Ok == false)
