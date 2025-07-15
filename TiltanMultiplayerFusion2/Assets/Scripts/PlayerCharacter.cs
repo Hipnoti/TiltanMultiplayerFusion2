@@ -112,4 +112,24 @@ public class PlayerCharacter : NetworkBehaviour
         }
     }
     
+    
+    [ContextMenu("ReleaseStateAuthorirty")]
+    public void ReleaseStateAuthority()
+    {
+        if (Object.HasStateAuthority)
+        {
+            Object.ReleaseStateAuthority();
+            Debug.Log("Released State Authority");
+        }
+    }
+    
+    [ContextMenu("RequestStateAuthority")]
+    public void RequestStateAuthority()
+    {
+        if (!Object.HasStateAuthority)
+        {
+            Object.RequestStateAuthority();
+            Debug.Log("Requested State Authority");
+        }
+    }
 }
