@@ -65,7 +65,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             OnGameStarted = OnGameStarted,
             SessionProperties = new Dictionary<string, SessionProperty>()
             {
-                {GAME_MODE_KEY, (int)VersusMode.TwoVsTwo}
+                {GAME_MODE_KEY, versusModeDropdown.value}
             }
         });
 
@@ -89,7 +89,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             EnableClientSessionCreation = false,
             SessionProperties = new Dictionary<string, SessionProperty>()
             {
-                { GAME_MODE_KEY, (int)VersusMode.TwoVsTwo }
+                { GAME_MODE_KEY, versusModeDropdown.value }
             }
         });
 
