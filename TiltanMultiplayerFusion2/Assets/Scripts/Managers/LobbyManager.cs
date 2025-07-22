@@ -14,6 +14,7 @@ using UnityEngine.Serialization;
 public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     public static LobbyManager Instance;
+    public const string GAME_MODE_KEY = "GameMode";
     public const string GAME_SCENE_NAME = "GameScene";
 
     [SerializeField] private ReadyManager readyManagerPrefab;
@@ -23,6 +24,8 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     [Header("UI References")] [SerializeField]
     private GameObject sessionPanel;
 
+    [SerializeField] private TMP_Dropdown versusModeDropdown;
+    [SerializeField] private Button joinRandomSessionButton;
     [SerializeField] private Button sendReadyButton;
     [SerializeField] private Button startSessionButton;
     [SerializeField] private Button endSessionButton;
@@ -31,7 +34,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     
     public ReadyManager readyManagerInstance;
     private bool isReadyLocal = false;
-    
+
     private void Start()
     {
         Instance = this;
@@ -41,12 +44,18 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         startMatchButton.interactable = false;
         sendReadyButton.interactable = false;
 #endif
+
+        // Populate the versusModeDropdown with the VersusMode enum values
+        versusModeDropdown.ClearOptions();
+        List<string> versusModeOptions = new List<string>(System.Enum.GetNames(typeof(VersusMode)));
+        versusModeDropdown.AddOptions(versusModeOptions);
     }
 
     public async void StartSession()
     {
 #if LOBBY_MANAGER_UI
         startSessionButton.interactable = false;
+        joinRandomSessionButton.interactable = false;
 #endif
         
        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
@@ -54,6 +63,10 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
+            SessionProperties = new Dictionary<string, SessionProperty>()
+            {
+                {GAME_MODE_KEY, (int)VersusMode.TwoVsTwo}
+            }
         });
 
         if (startGameResult.Ok == false)
@@ -63,7 +76,30 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    private void OnGameStarted(NetworkRunner obj)
+    public async void JoinRandomSession()
+    {
+#if LOBBY_MANAGER_UI
+        startSessionButton.interactable = false;
+        joinRandomSessionButton.interactable = false;
+#endif
+        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
+        {
+            GameMode = GameMode.Shared,
+            OnGameStarted = OnGameStarted,
+            EnableClientSessionCreation = false,
+            SessionProperties = new Dictionary<string, SessionProperty>()
+            {
+                { GAME_MODE_KEY, (int)VersusMode.TwoVsTwo }
+            }
+        });
+
+        if (startGameResult.Ok)
+            Debug.Log("Joined Random Session!");
+        else
+            Debug.LogError($"Game failed to start because {startGameResult.ErrorMessage}");
+    }
+
+    private void OnGameStarted(NetworkRunner thisNetworkRunner)
     {
         Debug.Log("Game Started");
 #if LOBBY_MANAGER_UI
@@ -75,6 +111,11 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
          networkRunnerInstance.Spawn(readyManagerPrefab);
         // if (networkRunner.IsSharedModeMasterClient)
         //     networkRunner.Spawn(readyManagerGeneric);
+        
+        foreach (KeyValuePair<string, SessionProperty> sessionProperty in thisNetworkRunner.SessionInfo.Properties)
+        { 
+            Debug.Log("SessionProperty: " + sessionProperty.Key + " " + sessionProperty.Value.PropertyValue + "");
+        }
     }
 
     public void EndSession()
@@ -120,6 +161,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             sessionPanel.SetActive(false);
             startSessionButton.interactable = true;
+            joinRandomSessionButton.interactable = true;
         }
 #endif
     }
@@ -227,7 +269,6 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnConnectedToServer(NetworkRunner runner)
     {
         Debug.Log("Connected to server and lobby successfully!");
-
     }
 
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
@@ -236,6 +277,8 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         foreach (var session in sessionList)
         {
             Debug.Log($"Session Name: {session.Name}, Player Count: {session.PlayerCount}");
+            VersusMode sessionVersusMode = (VersusMode)session.Properties[GAME_MODE_KEY].PropertyValue;
+            Debug.Log($"Session Versus Mode: {sessionVersusMode}");
         }
     }
 
@@ -285,3 +328,5 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     //    Debug.Log("Game Started");;
     // }
 }
+
+public enum VersusMode {OneVsOne, TwoVsTwo }
