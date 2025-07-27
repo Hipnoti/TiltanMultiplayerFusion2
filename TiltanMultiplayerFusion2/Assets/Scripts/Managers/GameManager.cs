@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Fusion;
 using Fusion.Sockets;
+using Managers;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -13,9 +14,10 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public static GameManager Instance;
     public Camera mainCamera;
+    public InputManager inputManagerPrefab;
     public GameObject playerPrefab;
     public Transform playerSpawnPoint;
-
+    
     private NetworkRunner networkRunner;
 
     public SpawnPoint[] twoPlayerSpawnPoints;
@@ -100,6 +102,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         SpawnPoint targetSpawnPoint = sixPlayerSpawnPoints[spawnPointIndex];
 
         targetSpawnPoint.isTaken = true;
+        networkRunner.Spawn(inputManagerPrefab);
         networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
             targetSpawnPoint.transform.rotation);
     }

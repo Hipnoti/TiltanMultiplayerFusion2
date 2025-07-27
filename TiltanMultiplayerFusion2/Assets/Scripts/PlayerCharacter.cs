@@ -74,6 +74,12 @@ public class PlayerCharacter : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         base.FixedUpdateNetwork();
+        
+        if (GetInput(out NetworkFirePressedData data))
+        {
+            Debug.Log("fire pressed " + data.firePressed);
+        }
+        
         if (Object.HasStateAuthority)
         {
             Vector3 movementVector = Vector3.zero;
