@@ -990,6 +990,7 @@ GameObject:
   - component: {fileID: 579546827}
   - component: {fileID: 579546826}
   - component: {fileID: 579546828}
+  - component: {fileID: 579546829}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1025,6 +1026,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 2116205426}
+  inputManagerPrefab: {fileID: -1295335536759102707, guid: 635625712a7bb1d40b6fbb3d580237a8, type: 3}
   playerPrefab: {fileID: 6950915495295150835, guid: 9940c3337369924488383304a20dd56e, type: 3}
   playerSpawnPoint: {fileID: 725058872}
   twoPlayerSpawnPoints:
@@ -1056,6 +1058,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 579546826}
   - {fileID: 579546828}
+  - {fileID: 579546829}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &579546828
 MonoBehaviour:
@@ -1071,9 +1074,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trapSpawnIntervals: 10
   trapPrefab: {fileID: 8252323424928446531, guid: e718621d8b7f6494da7621b41c982256, type: 3}
+  _nextTrapSpawnTime: 0
   spawnAreaMin: {x: -19.77, y: -4.51}
   spawnAreaMax: {x: 3.8, y: 13.3}
   gizmoColor: {r: 0, g: 1, b: 0, a: 1}
+--- !u!114 &579546829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 579546824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8356e38199054b77bdfbcc32b002bb4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &725058872 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8744915146541290924, guid: 19f074a72b2b2f8488befd95fe352118, type: 3}

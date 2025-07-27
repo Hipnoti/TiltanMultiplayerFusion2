@@ -39,6 +39,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         Instance = this;
         networkRunnerInstance.AddCallbacks(this);
+        networkRunnerInstance.ProvideInput = true;
 #if LOBBY_MANAGER_UI
         endSessionButton.interactable = false;
         startMatchButton.interactable = false;
@@ -126,7 +127,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         sendReadyButton.interactable = true;
     //    startMatchButton.interactable = true;
 #endif
-        if(networkRunnerInstance.IsSharedModeMasterClient || networkRunnerInstance.IsServer)
+        if(networkRunnerInstance.IsServer)
          networkRunnerInstance.Spawn(readyManagerPrefab);
         // if (networkRunner.IsSharedModeMasterClient)
         //     networkRunner.Spawn(readyManagerGeneric);
@@ -215,6 +216,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         }
         
         networkRunnerInstance = Instantiate(networkRunnerPrefab);
+        networkRunnerInstance.ProvideInput = true;
         networkRunnerInstance.AddCallbacks(this);
 
         Debug.Log("New NetworkRunner spawned after shutdown");

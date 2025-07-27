@@ -9,6 +9,20 @@ namespace Managers
 {
     public class InputManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
+        private bool pressedFire;
+
+        public override void Spawned()
+        {
+            base.Spawned();
+            Runner.AddCallbacks(this);
+        }
+
+        private void Update()
+        {
+            if(!pressedFire)
+                pressedFire = Mouse.current.leftButton.wasPressedThisFrame;
+        }
+
         public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
         {
         }
@@ -51,15 +65,30 @@ namespace Managers
 
         public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
         {
+            
         }
 
         public void OnInput(NetworkRunner runner, NetworkInput input)
         {
-            NetworkFirePressedData networkFirePressedData = new NetworkFirePressedData();
+            PlayerChracterInputData playerChracterInputData = new PlayerChracterInputData();
+
+            playerChracterInputData.firePressed = pressedFire;
         
-            networkFirePressedData.firePressed = Mouse.current.leftButton.isPressed;
-        
-            input.Set(networkFirePressedData);
+            Vector3 movementVector = Vector3.zero;
+            Vector3 rotationVector = Vector3.zero;
+            if (Keyboard.current.wKey.isPressed) movementVector += Vector3.forward;
+            if (Keyboard.current.sKey.isPressed) movementVector += Vector3.back;
+            if (Keyboard.current.aKey.isPressed) movementVector += Vector3.left;
+            if (Keyboard.current.dKey.isPressed) movementVector += Vector3.right;
+            if (Keyboard.current.leftArrowKey.isPressed) rotationVector += Vector3.down;
+            if (Keyboard.current.rightArrowKey.isPressed) rotationVector += Vector3.up;
+            
+            playerChracterInputData.movementVector = movementVector;
+            playerChracterInputData.rotationVector = rotationVector;
+            
+            input.Set(playerChracterInputData);
+
+            pressedFire = false;
         }
 
         public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)

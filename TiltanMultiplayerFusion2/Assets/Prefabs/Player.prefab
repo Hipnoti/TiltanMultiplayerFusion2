@@ -581,7 +581,7 @@ MonoBehaviour:
   ApplyTiming: 2
   SyncSettings: 79
   StateHashes: 000000008bf29330b841b607958341e27e40c91f
-  TriggerHashes: 
+  TriggerHashes: 00000000
   TotalWords: 1
 --- !u!1001 &11049399764920155
 PrefabInstance:

@@ -79,7 +79,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
 
     //
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer)]
     private void RPCRequestSpawnPoint(RpcInfo info = default)
     {
         int spawnSpawnIndex = 0;
@@ -91,15 +91,9 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         } while (targetSpawnPoint.isTaken);
 
         targetSpawnPoint.isTaken = true;
-        
-        //WE GOT THE POWER!
-        if(networkRunner.GameMode == GameMode.Shared)
-          RPCSetSpawnPoint(info.Source, spawnSpawnIndex);
-        else if(networkRunner.IsServer)
-        {
-            NetworkSpawnOp op = networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
-                targetSpawnPoint.transform.rotation, info.Source);
-        }
+
+        networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
+            targetSpawnPoint.transform.rotation, info.Source);
     }
 
     //
@@ -112,7 +106,6 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         targetSpawnPoint.isTaken = true;
         NetworkSpawnOp op = networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
             targetSpawnPoint.transform.rotation);
-        networkRunner.Spawn(inputManagerPrefab);
 
         await op;
         //Only HOST/Shared mode client can do this!!!
