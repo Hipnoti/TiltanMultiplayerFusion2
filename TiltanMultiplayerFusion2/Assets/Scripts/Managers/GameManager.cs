@@ -111,6 +111,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
         targetSpawnPoint.isTaken = true;
         NetworkSpawnOp op = networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
+            targetSpawnPoint.transform.rotation);
         networkRunner.Spawn(inputManagerPrefab);
 
         await op;
