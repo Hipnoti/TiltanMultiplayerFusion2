@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
 using Managers;
@@ -90,21 +91,30 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         } while (targetSpawnPoint.isTaken);
 
         targetSpawnPoint.isTaken = true;
-        RPCSetSpawnPoint(info.Source, spawnSpawnIndex);
-        ;
+        
+        //WE GOT THE POWER!
+        if(networkRunner.GameMode == GameMode.Shared)
+          RPCSetSpawnPoint(info.Source, spawnSpawnIndex);
+        else if(networkRunner.IsServer)
+        {
+            NetworkSpawnOp op = networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
+                targetSpawnPoint.transform.rotation, info.Source);
+        }
     }
 
     //
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void RPCSetSpawnPoint([RpcTarget] PlayerRef targetPlayer, int spawnPointIndex)
+    private async void RPCSetSpawnPoint([RpcTarget] PlayerRef targetPlayer, int spawnPointIndex)
     {
         Debug.Log("RPCSetSpawnPoint");
         SpawnPoint targetSpawnPoint = sixPlayerSpawnPoints[spawnPointIndex];
 
         targetSpawnPoint.isTaken = true;
+        NetworkSpawnOp op = networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
         networkRunner.Spawn(inputManagerPrefab);
-        networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
-            targetSpawnPoint.transform.rotation);
+
+        await op;
+        //Only HOST/Shared mode client can do this!!!
     }
 
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
@@ -154,6 +164,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+        
     }
 
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)

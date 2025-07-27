@@ -32,7 +32,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private Button startMatchButton;
     [SerializeField] private TextMeshProUGUI numberOfPlayersText;
     
-    public ReadyManager readyManagerInstance;
+    [HideInInspector] public ReadyManager readyManagerInstance;
     private bool isReadyLocal = false;
 
     private void Start()
@@ -51,7 +51,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         versusModeDropdown.AddOptions(versusModeOptions);
     }
 
-    public async void StartSession()
+    public async void StartSessionShared()
     {
 #if LOBBY_MANAGER_UI
         startSessionButton.interactable = false;
@@ -67,6 +67,25 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             {
                 {GAME_MODE_KEY, versusModeDropdown.value}
             }
+        });
+
+        if (startGameResult.Ok == false)
+        {
+            Debug.LogError($"Game failed to start because {startGameResult.ErrorMessage}, " +
+                           $"shutdown reason is {startGameResult.ShutdownReason}");
+        }
+    }
+    
+    public async void StartSessionHost()
+    {
+#if LOBBY_MANAGER_UI
+        startSessionButton.interactable = false;
+#endif
+        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
+        {
+            GameMode = GameMode.AutoHostOrClient,
+            SessionName = "OurGameID",
+            OnGameStarted = OnGameStarted,
         });
 
         if (startGameResult.Ok == false)
@@ -107,7 +126,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         sendReadyButton.interactable = true;
     //    startMatchButton.interactable = true;
 #endif
-        if(networkRunnerInstance.IsSharedModeMasterClient)
+        if(networkRunnerInstance.IsSharedModeMasterClient || networkRunnerInstance.IsServer)
          networkRunnerInstance.Spawn(readyManagerPrefab);
         // if (networkRunner.IsSharedModeMasterClient)
         //     networkRunner.Spawn(readyManagerGeneric);
