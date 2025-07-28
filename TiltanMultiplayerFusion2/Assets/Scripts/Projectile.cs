@@ -27,7 +27,7 @@ public class Projectile : NetworkBehaviour
             Instantiate(player.hitEffectPrefab, player.transform.position, Quaternion.identity);
             if (HasStateAuthority)
             {
-                if (!player.HasStateAuthority)
+                if (player.HasStateAuthority)
                 {
                     player.RPCTakeDamage(10);
                     Runner.Despawn(Object);
@@ -35,7 +35,5 @@ public class Projectile : NetworkBehaviour
             }
             
         }
-
-        //Add here projetcile hit particle instanatiate
     }
 }

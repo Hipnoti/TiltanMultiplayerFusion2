@@ -77,8 +77,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
         SceneManager.LoadScene(LOBBY_SCENE_NAME);
     }
-
-    //
+    
     [Rpc(RpcSources.All, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer)]
     private void RPCRequestSpawnPoint(RpcInfo info = default)
     {
