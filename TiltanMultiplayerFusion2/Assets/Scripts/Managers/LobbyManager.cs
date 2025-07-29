@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Fusion;
+using Fusion.Photon.Realtime;
 using Fusion.Sockets;
 using TMPro;
 using UnityEngine;
@@ -60,13 +61,16 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         
        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
         {
+            
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
+            AuthValues = new AuthenticationValues(SystemInfo.deviceUniqueIdentifier + 
+                                                  Unity.Multiplayer.Playmode.CurrentPlayer.ReadOnlyTags()[0]),
             SessionProperties = new Dictionary<string, SessionProperty>()
             {
                 {GAME_MODE_KEY, versusModeDropdown.value}
-            }
+            },
         });
 
         if (startGameResult.Ok == false)
@@ -199,6 +203,11 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         networkRunnerInstance.AddCallbacks(this);
 
         Debug.Log("New NetworkRunner spawned after shutdown");
+    }
+
+    private void Update()
+    {
+        int a = 10;
     }
 
     #region RunnerCallBacks

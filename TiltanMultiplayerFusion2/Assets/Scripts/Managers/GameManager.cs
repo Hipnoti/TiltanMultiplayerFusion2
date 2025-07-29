@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
@@ -10,7 +11,9 @@ using Random = UnityEngine.Random;
 public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 {
     public const string LOBBY_SCENE_NAME = "LobbyScene";
-
+    
+    private Dictionary<string, PlayerRef> userIdPlayersMap = new Dictionary<string, PlayerRef>();
+    
     public static GameManager Instance;
     public Camera mainCamera;
     public GameObject playerPrefab;
@@ -62,8 +65,17 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     public override void Spawned()
     {
         base.Spawned();
-        RPCRequestSpawnPoint();
+        RPCRequestSpawn();
+   //     InitializeUserIdMap();
     }
+
+    // private void InitializeUserIdMap()
+    // {
+    //     foreach (var player in networkRunner.ActivePlayers)
+    //     {
+    //        
+    //     }
+    // }
 
     public void LeaveGame()
     {
@@ -74,22 +86,31 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
         SceneManager.LoadScene(LOBBY_SCENE_NAME);
     }
-
-    //
+    
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    private void RPCRequestSpawnPoint(RpcInfo info = default)
+    private void RPCRequestSpawn(RpcInfo info = default)
     {
-        int spawnSpawnIndex = 0;
-        SpawnPoint targetSpawnPoint;
-        do
+        string userId = networkRunner.GetPlayerUserId(info.Source);
+        if(userIdPlayersMap.TryGetValue(userId, out PlayerRef playerRef))
         {
-            spawnSpawnIndex = Random.Range(0, sixPlayerSpawnPoints.Length);
-            targetSpawnPoint = sixPlayerSpawnPoints[spawnSpawnIndex];
-        } while (targetSpawnPoint.isTaken);
+           Debug.Log("It's a rejoin!");
+           RPCRequestAllAuthorityBack(info.Source, playerRef);
+           userIdPlayersMap[userId] = info.Source;
+        }
+        else
+        {
+            userIdPlayersMap[userId] = info.Source;
+            int spawnSpawnIndex = 0;
+            SpawnPoint targetSpawnPoint;
+            do
+            {
+                spawnSpawnIndex = Random.Range(0, sixPlayerSpawnPoints.Length);
+                targetSpawnPoint = sixPlayerSpawnPoints[spawnSpawnIndex];
+            } while (targetSpawnPoint.isTaken);
 
-        targetSpawnPoint.isTaken = true;
-        RPCSetSpawnPoint(info.Source, spawnSpawnIndex);
-        ;
+            targetSpawnPoint.isTaken = true;
+            RPCSetSpawnPoint(info.Source, spawnSpawnIndex);
+        }
     }
 
     //
@@ -104,6 +125,17 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
             targetSpawnPoint.transform.rotation);
     }
 
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPCRequestAllAuthorityBack([RpcTarget] PlayerRef targetPlayer, PlayerRef oldPlayer)
+    {
+        List<NetworkObject> networkObjects = networkRunner.GetAllNetworkObjects();
+        networkObjects = networkObjects.Where(o => o.StateAuthority == oldPlayer).ToList();
+        foreach (var networkObject in networkObjects)
+        {
+            networkObject.RequestStateAuthority();
+        }
+    }
+
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
     }
@@ -114,7 +146,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        
+     
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
