@@ -37,6 +37,9 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private void Start()
     {
+#if UNITY_SERVER
+        Debug.Log("This is a server build! we should start without waiting for input");
+#endif
         Instance = this;
         networkRunnerInstance.AddCallbacks(this);
         networkRunnerInstance.ProvideInput = true;
@@ -64,6 +67,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
+            
             SessionProperties = new Dictionary<string, SessionProperty>()
             {
                 {GAME_MODE_KEY, versusModeDropdown.value}
@@ -84,7 +88,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 #endif
         StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
         {
-            GameMode = GameMode.AutoHostOrClient,
+            GameMode = GameMode.Server,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
         });
