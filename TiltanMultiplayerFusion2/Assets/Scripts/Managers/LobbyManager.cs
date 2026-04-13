@@ -65,8 +65,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
-            AuthValues = new AuthenticationValues(SystemInfo.deviceUniqueIdentifier + 
-                                                  Unity.Multiplayer.Playmode.CurrentPlayer.ReadOnlyTags()[0]),
+            AuthValues = new AuthenticationValues(SystemInfo.deviceUniqueIdentifier),
             SessionProperties = new Dictionary<string, SessionProperty>()
             {
                 {GAME_MODE_KEY, versusModeDropdown.value}

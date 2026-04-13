@@ -25,7 +25,10 @@
             "ServerIndex": 0,
             "ClientSendIndex": 1,
             "ServerSendIndex": 1
-        }
+        },
+        "MaxObjectDestroysSentPerPacket": 32,
+        "EnableExperimentalPacketLossRecovery": false,
+        "EnableAdaptivePacketFragmentation": false
     },
     "Network": {
         "ConnectionTimeout": 10.0,
@@ -42,11 +45,11 @@
     "NetworkConditions": {
         "Enabled": false,
         "DelayShape": 0,
-        "DelayMin": 0.0,
-        "DelayMax": 0.04082997143268585,
-        "DelayPeriod": 0.19685038924217225,
+        "DelayMin": 0.15,
+        "DelayMax": 0.15,
+        "DelayPeriod": 0.0,
         "DelayThreshold": 0.0,
-        "AdditionalJitter": 1.0,
+        "AdditionalJitter": 0.05,
         "LossChanceShape": 0,
         "LossChanceMin": 0.05,
         "LossChanceMax": 0.05,
