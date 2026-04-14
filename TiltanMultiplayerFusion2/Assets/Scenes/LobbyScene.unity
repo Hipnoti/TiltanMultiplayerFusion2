@@ -718,7 +718,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkRunnerPrefab: {fileID: 7946471972512591551, guid: 9185d9cdaedf3c649a52d83e60226c84, type: 3}
-  networkRunnerInstance: {fileID: 0}
+  networkRunnerInstance: {fileID: 238445930}
   sessionPanel: {fileID: 738174464}
   startSessionButton: {fileID: 170808938}
   numberOfPlayersText: {fileID: 1857942904}
