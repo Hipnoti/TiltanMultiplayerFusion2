@@ -72,7 +72,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             },
         });
 
-        if (startGameResult.Ok == false)
+        if (!startGameResult.Ok)
         {
             Debug.LogError($"Game failed to start because {startGameResult.ErrorMessage}, " +
                            $"shutdown reason is {startGameResult.ShutdownReason}");
