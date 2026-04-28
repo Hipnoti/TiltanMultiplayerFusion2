@@ -17,61 +17,38 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     public static LobbyManager Instance;
     public const string GAME_MODE_KEY = "GameMode";
     public const string GAME_SCENE_NAME = "GameScene";
-
-    [SerializeField] private ReadyManager readyManagerPrefab;
-    [SerializeField] private NetworkRunner networkRunnerPrefab;
-    [FormerlySerializedAs("networkRunner")] [SerializeField] NetworkRunner networkRunnerInstance;
+    
+    [SerializeField] NetworkRunner networkRunnerInstance;
 
     [Header("UI References")] [SerializeField]
     private GameObject sessionPanel;
-
-    [SerializeField] private TMP_Dropdown versusModeDropdown;
-    [SerializeField] private Button joinRandomSessionButton;
-    [SerializeField] private Button sendReadyButton;
+    
+    [SerializeField] private Button joinLobbyButton;
+    [SerializeField] private TMP_InputField lobbyNameField;
     [SerializeField] private Button startSessionButton;
     [SerializeField] private Button endSessionButton;
-    [SerializeField] private Button startMatchButton;
     [SerializeField] private TextMeshProUGUI numberOfPlayersText;
     
-    public ReadyManager readyManagerInstance;
     private bool isReadyLocal = false;
 
     private void Start()
     {
         Instance = this;
-        networkRunnerInstance.AddCallbacks(this);
-#if LOBBY_MANAGER_UI
         endSessionButton.interactable = false;
-        startMatchButton.interactable = false;
-        sendReadyButton.interactable = false;
-#endif
-
-        // Populate the versusModeDropdown with the VersusMode enum values
-        versusModeDropdown.ClearOptions();
-        List<string> versusModeOptions = new List<string>(System.Enum.GetNames(typeof(VersusMode)));
-        versusModeDropdown.AddOptions(versusModeOptions);
+        networkRunnerInstance.AddCallbacks(this);
     }
 
     public async void StartSession()
     {
-#if LOBBY_MANAGER_UI
         startSessionButton.interactable = false;
-        joinRandomSessionButton.interactable = false;
-#endif
-        
+        joinLobbyButton.interactable = false;
        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
         {
-            
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
-            OnGameStarted = OnGameStarted,
-            AuthValues = new AuthenticationValues(SystemInfo.deviceUniqueIdentifier),
-            SessionProperties = new Dictionary<string, SessionProperty>()
-            {
-                {GAME_MODE_KEY, versusModeDropdown.value}
-            },
+            OnGameStarted = OnGameStarted
         });
-
+       
         if (!startGameResult.Ok)
         {
             Debug.LogError($"Game failed to start because {startGameResult.ErrorMessage}, " +
@@ -79,41 +56,10 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-    public async void JoinRandomSession()
-    {
-#if LOBBY_MANAGER_UI
-        startSessionButton.interactable = false;
-        joinRandomSessionButton.interactable = false;
-#endif
-        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
-        {
-            GameMode = GameMode.Shared,
-            OnGameStarted = OnGameStarted,
-            EnableClientSessionCreation = false,
-            SessionProperties = new Dictionary<string, SessionProperty>()
-            {
-                { GAME_MODE_KEY, versusModeDropdown.value }
-            }
-        });
-
-        if (startGameResult.Ok)
-            Debug.Log("Joined Random Session!");
-        else
-            Debug.LogError($"Game failed to start because {startGameResult.ErrorMessage}");
-    }
-
     private void OnGameStarted(NetworkRunner thisNetworkRunner)
     {
         Debug.Log("Game Started");
-#if LOBBY_MANAGER_UI
         endSessionButton.interactable = true;
-        sendReadyButton.interactable = true;
-    //    startMatchButton.interactable = true;
-#endif
-        if(networkRunnerInstance.IsSharedModeMasterClient)
-         networkRunnerInstance.Spawn(readyManagerPrefab);
-        // if (networkRunner.IsSharedModeMasterClient)
-        //     networkRunner.Spawn(readyManagerGeneric);
         
         foreach (KeyValuePair<string, SessionProperty> sessionProperty in thisNetworkRunner.SessionInfo.Properties)
         { 
@@ -130,15 +76,14 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 #if LOBBY_MANAGER_UI
         startSessionButton.interactable = true;
         endSessionButton.interactable = false;
-        startMatchButton.interactable = false;
-        sendReadyButton.interactable = false;
 #endif
     }
 
     public async void JoinLobby()
     {
+        joinLobbyButton.interactable = false;
        StartGameResult result = 
-           await networkRunnerInstance.JoinSessionLobby(SessionLobby.Custom, "MainLobby");
+           await networkRunnerInstance.JoinSessionLobby(SessionLobby.Custom, lobbyNameField.text);
      
        if (result.Ok)
        {
@@ -164,7 +109,6 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             sessionPanel.SetActive(false);
             startSessionButton.interactable = true;
-            joinRandomSessionButton.interactable = true;
         }
 #endif
     }
@@ -181,33 +125,9 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         if (!isReadyLocal)
         {
             isReadyLocal = true;
-            readyManagerInstance.SetReadyRPC();
-            sendReadyButton.interactable = false;
         }
     }
-
-    public void MaxPlayersReady()
-    {
-        startMatchButton.interactable = true;
-    }
-
-    private void SpawnNewRunner()
-    {
-        if (networkRunnerInstance != null)
-        {
-            networkRunnerInstance.RemoveCallbacks(this);
-        }
-        
-        networkRunnerInstance = Instantiate(networkRunnerPrefab);
-        networkRunnerInstance.AddCallbacks(this);
-
-        Debug.Log("New NetworkRunner spawned after shutdown");
-    }
-
-    private void Update()
-    {
-        int a = 10;
-    }
+    
 
     #region RunnerCallBacks
 
@@ -238,7 +158,6 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log("ShutDown call because " + shutdownReason);
         RefreshRoomUI();
-        SpawnNewRunner();
     }
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
@@ -285,8 +204,6 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         foreach (var session in sessionList)
         {
             Debug.Log($"Session Name: {session.Name}, Player Count: {session.PlayerCount}");
-            VersusMode sessionVersusMode = (VersusMode)session.Properties[GAME_MODE_KEY].PropertyValue;
-            Debug.Log($"Session Versus Mode: {sessionVersusMode}");
         }
     }
 
@@ -308,33 +225,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     }
 
     #endregion
-
-
-  
-
-    // public async void StartSession()
-    // {
-    //    StartGameResult resTask = await networkRunner.StartGame(new StartGameArgs()
-    //    {
-    //       GameMode = GameMode.Shared,
-    //       SessionName = "OurGameID",
-    //       OnGameStarted = OnGameStarted
-    //    });
-    //
-    //    if (resTask.Ok)
-    //    {
-    //       OnGameStarted(networkRunner);
-    //    }
-    //    else
-    //    {
-    //       Debug.LogError($"Game failed to start because {resTask.ErrorMessage}");
-    //    }
-    // }
-    //
-    // private void OnGameStarted(NetworkRunner obj)
-    // {
-    //    Debug.Log("Game Started");;
-    // }
+    
 }
 
 public enum VersusMode {OneVsOne, TwoVsTwo }
