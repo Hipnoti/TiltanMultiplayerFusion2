@@ -45,7 +45,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
         {
             GameMode = GameMode.Shared,
-            SessionName = "OurGameID",
+            SessionName = "OurGameIDD",
             OnGameStarted = OnGameStarted
         });
        
@@ -61,10 +61,10 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         Debug.Log("Game Started");
         endSessionButton.interactable = true;
         
-        foreach (KeyValuePair<string, SessionProperty> sessionProperty in thisNetworkRunner.SessionInfo.Properties)
-        { 
-            Debug.Log("SessionProperty: " + sessionProperty.Key + " " + sessionProperty.Value.PropertyValue + "");
-        }
+        // foreach (KeyValuePair<string, SessionProperty> sessionProperty in thisNetworkRunner.SessionInfo.Properties)
+        // { 
+        //     Debug.Log("SessionProperty: " + sessionProperty.Key + " " + sessionProperty.Value.PropertyValue + "");
+        // }
     }
 
     public void EndSession()
