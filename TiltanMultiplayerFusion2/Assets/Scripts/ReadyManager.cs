@@ -18,11 +18,11 @@ public class ReadyManager : NetworkBehaviour
             
     }
 
-    public override void Spawned()
-    {
-        base.Spawned();
-        LobbyManager.Instance.readyManagerInstance = this;
-        onReadyCounterReachedMax += LobbyManager.Instance.MaxPlayersReady;
-    }
+    // public override void Spawned()
+    // {
+    //     base.Spawned();
+    //     LobbyManager.Instance.readyManagerInstance = this;
+    //     onReadyCounterReachedMax += LobbyManager.Instance.MaxPlayersReady;
+    // }
     
 }

@@ -9,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Multiplayer;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 
@@ -53,11 +54,11 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         
        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
         {
-            
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted
         });
+
 
         if (!startGameResult.Ok)
         {
@@ -73,12 +74,10 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 #if LOBBY_MANAGER_UI
         endSessionButton.interactable = true;
         sendReadyButton.interactable = true;
-    //    startMatchButton.interactable = true;
+        startMatchButton.interactable = true;
 #endif
-        if(networkRunnerInstance.IsSharedModeMasterClient)
-         networkRunnerInstance.Spawn(readyManagerPrefab);
-        // if (networkRunner.IsSharedModeMasterClient)
-        //     networkRunner.Spawn(readyManagerGeneric);
+        // if(networkRunnerInstance.IsSharedModeMasterClient)
+        //  networkRunnerInstance.Spawn(readyManagerPrefab);
         
         foreach (KeyValuePair<string, SessionProperty> sessionProperty in thisNetworkRunner.SessionInfo.Properties)
         { 
@@ -133,11 +132,10 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 #endif
     }
 
-    public void StartMatch()
-    {
-      //  networkRunnerInstance.SessionInfo.IsVisible = false;
-      //  networkRunnerInstance.SessionInfo.IsOpen = false;
-        networkRunnerInstance.LoadScene(GAME_SCENE_NAME);
+    public void StartMatch()        
+   {
+  //     networkRunnerInstance.LoadScene(GAME_SCENE_NAME);
+     SceneManager.LoadScene(GAME_SCENE_NAME);
     }
     
     public void SetReady()
@@ -235,8 +233,6 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         foreach (var session in sessionList)
         {
             Debug.Log($"Session Name: {session.Name}, Player Count: {session.PlayerCount}");
-            VersusMode sessionVersusMode = (VersusMode)session.Properties[GAME_MODE_KEY].PropertyValue;
-            Debug.Log($"Session Versus Mode: {sessionVersusMode}");
         }
     }
 
