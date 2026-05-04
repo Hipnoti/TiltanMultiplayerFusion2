@@ -19,14 +19,12 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     public const string GAME_SCENE_NAME = "GameScene";
 
     [SerializeField] private ReadyManager readyManagerPrefab;
-    [SerializeField] private NetworkRunner networkRunnerPrefab;
     [FormerlySerializedAs("networkRunner")] [SerializeField] NetworkRunner networkRunnerInstance;
 
     [Header("UI References")] [SerializeField]
     private GameObject sessionPanel;
 
     [SerializeField] private TMP_Dropdown versusModeDropdown;
-    [SerializeField] private Button joinRandomSessionButton;
     [SerializeField] private Button sendReadyButton;
     [SerializeField] private Button startSessionButton;
     [SerializeField] private Button endSessionButton;
@@ -45,18 +43,12 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         startMatchButton.interactable = false;
         sendReadyButton.interactable = false;
 #endif
-
-        // Populate the versusModeDropdown with the VersusMode enum values
-        versusModeDropdown.ClearOptions();
-        List<string> versusModeOptions = new List<string>(System.Enum.GetNames(typeof(VersusMode)));
-        versusModeDropdown.AddOptions(versusModeOptions);
     }
 
     public async void StartSession()
     {
 #if LOBBY_MANAGER_UI
         startSessionButton.interactable = false;
-        joinRandomSessionButton.interactable = false;
 #endif
         
        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
@@ -64,12 +56,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
-            OnGameStarted = OnGameStarted,
-            AuthValues = new AuthenticationValues(SystemInfo.deviceUniqueIdentifier),
-            SessionProperties = new Dictionary<string, SessionProperty>()
-            {
-                {GAME_MODE_KEY, versusModeDropdown.value}
-            },
+            OnGameStarted = OnGameStarted
         });
 
         if (!startGameResult.Ok)
@@ -78,29 +65,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
                            $"shutdown reason is {startGameResult.ShutdownReason}");
         }
     }
-
-    public async void JoinRandomSession()
-    {
-#if LOBBY_MANAGER_UI
-        startSessionButton.interactable = false;
-        joinRandomSessionButton.interactable = false;
-#endif
-        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
-        {
-            GameMode = GameMode.Shared,
-            OnGameStarted = OnGameStarted,
-            EnableClientSessionCreation = false,
-            SessionProperties = new Dictionary<string, SessionProperty>()
-            {
-                { GAME_MODE_KEY, versusModeDropdown.value }
-            }
-        });
-
-        if (startGameResult.Ok)
-            Debug.Log("Joined Random Session!");
-        else
-            Debug.LogError($"Game failed to start because {startGameResult.ErrorMessage}");
-    }
+    
 
     private void OnGameStarted(NetworkRunner thisNetworkRunner)
     {
@@ -164,7 +129,6 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         {
             sessionPanel.SetActive(false);
             startSessionButton.interactable = true;
-            joinRandomSessionButton.interactable = true;
         }
 #endif
     }
@@ -190,20 +154,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         startMatchButton.interactable = true;
     }
-
-    private void SpawnNewRunner()
-    {
-        if (networkRunnerInstance != null)
-        {
-            networkRunnerInstance.RemoveCallbacks(this);
-        }
-        
-        networkRunnerInstance = Instantiate(networkRunnerPrefab);
-        networkRunnerInstance.AddCallbacks(this);
-
-        Debug.Log("New NetworkRunner spawned after shutdown");
-    }
-
+    
     private void Update()
     {
         int a = 10;
@@ -238,7 +189,6 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log("ShutDown call because " + shutdownReason);
         RefreshRoomUI();
-        SpawnNewRunner();
     }
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
