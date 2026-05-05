@@ -1196,11 +1196,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   readyManagerPrefab: {fileID: 2924948945307034632, guid: 9da87996a2bbffc46bf145fb79aa3746, type: 3}
-  networkRunnerPrefab: {fileID: 7946471972512591551, guid: 9185d9cdaedf3c649a52d83e60226c84, type: 3}
   networkRunnerInstance: {fileID: 1940105373}
   sessionPanel: {fileID: 738174464}
   versusModeDropdown: {fileID: 1811686720}
-  joinRandomSessionButton: {fileID: 1625705189}
   sendReadyButton: {fileID: 1241728283}
   startSessionButton: {fileID: 170808938}
   endSessionButton: {fileID: 1763314109}
@@ -2141,7 +2139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1241728282
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2157,9 +2155,9 @@ RectTransform:
   - {fileID: 240776171}
   m_Father: {fileID: 1967407747}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 139.732, y: -25.056591}
   m_SizeDelta: {x: 279.464, y: 50.113182}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1241728283

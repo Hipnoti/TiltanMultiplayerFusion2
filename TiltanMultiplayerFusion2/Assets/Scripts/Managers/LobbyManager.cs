@@ -76,13 +76,13 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         sendReadyButton.interactable = true;
         startMatchButton.interactable = true;
 #endif
-        // if(networkRunnerInstance.IsSharedModeMasterClient)
-        //  networkRunnerInstance.Spawn(readyManagerPrefab);
+        if(networkRunnerInstance.IsSharedModeMasterClient)
+         readyManagerInstance = networkRunnerInstance.Spawn(readyManagerPrefab);
         
-        foreach (KeyValuePair<string, SessionProperty> sessionProperty in thisNetworkRunner.SessionInfo.Properties)
-        { 
-            Debug.Log("SessionProperty: " + sessionProperty.Key + " " + sessionProperty.Value.PropertyValue + "");
-        }
+        // foreach (KeyValuePair<string, SessionProperty> sessionProperty in thisNetworkRunner.SessionInfo.Properties)
+        // { 
+        //     Debug.Log("SessionProperty: " + sessionProperty.Key + " " + sessionProperty.Value.PropertyValue + "");
+        // }
     }
 
     public void EndSession()
@@ -134,8 +134,8 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void StartMatch()        
    {
-  //     networkRunnerInstance.LoadScene(GAME_SCENE_NAME);
-     SceneManager.LoadScene(GAME_SCENE_NAME);
+       networkRunnerInstance.LoadScene(GAME_SCENE_NAME);
+    // SceneManager.LoadScene(GAME_SCENE_NAME);
     }
     
     public void SetReady()
