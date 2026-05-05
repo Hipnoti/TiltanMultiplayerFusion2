@@ -74,7 +74,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 #if LOBBY_MANAGER_UI
         endSessionButton.interactable = true;
         sendReadyButton.interactable = true;
-        startMatchButton.interactable = true;
+        startMatchButton.interactable = false;
 #endif
         if(networkRunnerInstance.IsSharedModeMasterClient)
          readyManagerInstance = networkRunnerInstance.Spawn(readyManagerPrefab);

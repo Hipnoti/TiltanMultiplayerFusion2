@@ -13,16 +13,17 @@ public class ReadyManager : NetworkBehaviour
         Debug.Log($"Player id {info.Source.PlayerId} is ready");
         readyCounter++;
         Debug.Log($"Ready counter: {readyCounter}");
-         // if(readyCounter >= 2)
-              onReadyCounterReachedMax?.Invoke();
+         if(readyCounter >= 2)
+             onReadyCounterReachedMax?.Invoke();
             
     }
 
-    // public override void Spawned()
-    // {
-    //     base.Spawned();
-    //     LobbyManager.Instance.readyManagerInstance = this;
-    //     onReadyCounterReachedMax += LobbyManager.Instance.MaxPlayersReady;
-    // }
+    public override void Spawned()
+    {
+        base.Spawned();
+        LobbyManager.Instance.readyManagerInstance = this;
+        Debug.Log("Ready manager spawned");
+        onReadyCounterReachedMax += LobbyManager.Instance.MaxPlayersReady;
+    }
     
 }
