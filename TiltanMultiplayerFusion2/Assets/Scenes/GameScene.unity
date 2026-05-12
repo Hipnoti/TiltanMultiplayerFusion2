@@ -546,7 +546,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &289340505
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1000,6 +1000,7 @@ GameObject:
   m_Component:
   - component: {fileID: 579546825}
   - component: {fileID: 579546826}
+  - component: {fileID: 579546827}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1047,6 +1048,25 @@ MonoBehaviour:
   - {fileID: 2087888823}
   - {fileID: 335343948}
   - {fileID: 275299118}
+--- !u!114 &579546827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 579546824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fusion.Runtime.dll::Fusion.NetworkObject
+  SortKey: 3101452130
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 579546826}
+  ForceRemoteRenderTimeframe: 0
 --- !u!4 &725058872 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8744915146541290924, guid: 19f074a72b2b2f8488befd95fe352118, type: 3}
