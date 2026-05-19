@@ -15,12 +15,14 @@ public class PlayerCharacter : NetworkBehaviour
     [SerializeField] private float rotationSpeed = 30f;
     [SerializeField] float speed = 10f;
     
-  //  [Networked, OnChangedRender (nameof(HPChanged))] [field: SerializeField]
+    [Networked, OnChangedRender (nameof(HPChanged))] [field: SerializeField]
     public int HP
     {
         get;
         set;
     }
+
+    public int someInt { get; set; }
     
 
     [ContextMenu("TakeDamageTest")]
@@ -39,7 +41,16 @@ public class PlayerCharacter : NetworkBehaviour
     public void TakeDamage(int damage)
     {
         if(Object.HasStateAuthority)
+        {
             HP -= damage;
+            HPChanged();
+        }
+    }
+
+    public override void Spawned()
+    {
+        base.Spawned();
+        HP = MaxHP;
     }
 
     private void HPChanged()
