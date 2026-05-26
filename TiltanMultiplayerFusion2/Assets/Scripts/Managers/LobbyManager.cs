@@ -61,7 +61,6 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         
        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
         {
-            
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
