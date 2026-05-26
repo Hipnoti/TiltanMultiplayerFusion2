@@ -71,6 +71,7 @@ MonoBehaviour:
   damage: 10
   speed: 10
   lifetime: 10
+  graphics: {fileID: 3688696641728606302}
 --- !u!114 &8356332252020891114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,6 +167,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62844ae1923dd6c449fc6a9b2ea29291, type: 3}
+--- !u!1 &3688696641728606302 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1005321012000136381, guid: 62844ae1923dd6c449fc6a9b2ea29291, type: 3}
+  m_PrefabInstance: {fileID: 4522594992583732451}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5707126311315530995 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8210261181187131408, guid: 62844ae1923dd6c449fc6a9b2ea29291, type: 3}
