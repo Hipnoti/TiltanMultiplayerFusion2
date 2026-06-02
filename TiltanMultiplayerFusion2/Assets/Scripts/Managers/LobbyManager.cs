@@ -65,11 +65,6 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
-            AuthValues = new AuthenticationValues(SystemInfo.deviceUniqueIdentifier),
-            SessionProperties = new Dictionary<string, SessionProperty>()
-            {
-                {GAME_MODE_KEY, versusModeDropdown.value}
-            },
         });
 
         if (!startGameResult.Ok)
@@ -112,13 +107,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 #endif
         if(networkRunnerInstance.IsSharedModeMasterClient)
          networkRunnerInstance.Spawn(readyManagerPrefab);
-        // if (networkRunner.IsSharedModeMasterClient)
-        //     networkRunner.Spawn(readyManagerGeneric);
         
-        foreach (KeyValuePair<string, SessionProperty> sessionProperty in thisNetworkRunner.SessionInfo.Properties)
-        { 
-            Debug.Log("SessionProperty: " + sessionProperty.Key + " " + sessionProperty.Value.PropertyValue + "");
-        }
     }
 
     public void EndSession()
@@ -203,11 +192,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 
         Debug.Log("New NetworkRunner spawned after shutdown");
     }
-
-    private void Update()
-    {
-        int a = 10;
-    }
+    
 
     #region RunnerCallBacks
 
@@ -238,7 +223,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log("ShutDown call because " + shutdownReason);
         RefreshRoomUI();
-        SpawnNewRunner();
+   //     SpawnNewRunner();
     }
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
