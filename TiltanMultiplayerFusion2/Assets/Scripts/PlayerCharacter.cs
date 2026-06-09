@@ -23,14 +23,22 @@ public class PlayerCharacter : NetworkBehaviour
     [SerializeField] Projectile projectilePrefab;
     [SerializeField] Transform projectileSpawnPoint;
     
-    [Networked, OnChangedRender (nameof(HPChanged))] [field: SerializeField]
-    public int HP
-    {
-        get;
-        set;
-    }
+    [Networked, OnChangedRender(nameof(HPChanged))]
+    public int HP { get; set; }
 
-    private int obsedHP = 0;
+     
+     // [Networked, OnChangedRender(nameof(HPChanged))] [field:SerializeField]
+     // private int _obfuscatedHP { get; set; }
+     //
+     // private const int HP_XOR_KEY = 0x5A5A5A5A; // Simple obfuscation key
+   
+     // public int HP
+     // {
+     //     get => _obfuscatedHP ^ HP_XOR_KEY;
+     //     set => _obfuscatedHP = value ^ HP_XOR_KEY;
+     // }
+     
+    
     private bool pressedFire = false;
 
     [ContextMenu("TakeDamageTest")]
@@ -48,13 +56,20 @@ public class PlayerCharacter : NetworkBehaviour
     }
     public void TakeDamage(int damage)
     {
-        if(Object.HasStateAuthority)
+        if (Object.HasStateAuthority)
+        {
             HP -= damage;
+        }
     }
 
     private void HPChanged()
     {
-        HP = Mathf.Clamp(HP, 0, MaxHP);
+        // Internal clamping to the real value
+        if (Object.HasStateAuthority)
+        {
+            HP = Mathf.Clamp(HP, 0, MaxHP);
+        }
+
         hpBarImage.fillAmount = HP / (float)MaxHP;
         if (HP <= 0)
         {
@@ -101,6 +116,12 @@ public class PlayerCharacter : NetworkBehaviour
             }
         }
      }
+
+    public override void Spawned()
+    {
+        base.Spawned();
+        HP = MaxHP;
+    }
 
     void SpawnProjectile()
     {
