@@ -65,6 +65,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
+            IsVisible = false
         });
 
         if (!startGameResult.Ok)
@@ -160,9 +161,12 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public void StartMatch()
     {
-      //  networkRunnerInstance.SessionInfo.IsVisible = false;
-      //  networkRunnerInstance.SessionInfo.IsOpen = false;
-        networkRunnerInstance.LoadScene(GAME_SCENE_NAME);
+        if(networkRunnerInstance.IsSharedModeMasterClient)
+        {
+            networkRunnerInstance.SessionInfo.IsVisible = false;
+            networkRunnerInstance.SessionInfo.IsOpen = false;
+            networkRunnerInstance.LoadScene(GAME_SCENE_NAME);
+        }
     }
     
     public void SetReady()
@@ -182,9 +186,10 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 
     private void SpawnNewRunner()
     {
-        if (networkRunnerInstance != null)
+        if (networkRunnerInstance)
         {
             networkRunnerInstance.RemoveCallbacks(this);
+            Destroy(networkRunnerInstance.gameObject);
         }
         
         networkRunnerInstance = Instantiate(networkRunnerPrefab);
@@ -223,7 +228,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         Debug.Log("ShutDown call because " + shutdownReason);
         RefreshRoomUI();
-   //     SpawnNewRunner();
+       // SpawnNewRunner();
     }
 
     public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason)
@@ -270,8 +275,8 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         foreach (var session in sessionList)
         {
             Debug.Log($"Session Name: {session.Name}, Player Count: {session.PlayerCount}");
-            VersusMode sessionVersusMode = (VersusMode)session.Properties[GAME_MODE_KEY].PropertyValue;
-            Debug.Log($"Session Versus Mode: {sessionVersusMode}");
+         //   VersusMode sessionVersusMode = (VersusMode)session.Properties[GAME_MODE_KEY].PropertyValue;
+           // Debug.Log($"Session Versus Mode: {sessionVersusMode}");
         }
     }
 
