@@ -133,7 +133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4937739800943794724, guid: 54569fb5dbc4190459af342251722228, type: 3}
       propertyPath: NetworkedBehaviours.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6797491551987131108, guid: 54569fb5dbc4190459af342251722228, type: 3}
       propertyPath: m_LocalPosition.x
@@ -546,7 +546,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &289340505
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -934,7 +934,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4937739800943794724, guid: 54569fb5dbc4190459af342251722228, type: 3}
       propertyPath: NetworkedBehaviours.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6797491551987131108, guid: 54569fb5dbc4190459af342251722228, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1001,6 +1001,7 @@ GameObject:
   - component: {fileID: 579546825}
   - component: {fileID: 579546827}
   - component: {fileID: 579546826}
+  - component: {fileID: 579546828}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1066,7 +1067,26 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 579546826}
+  - {fileID: 579546828}
   ForceRemoteRenderTimeframe: 0
+--- !u!114 &579546828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 579546824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eff2fff92e393140a5814a04f4fb0ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrapsManager
+  trapSpawnIntervals: 10
+  trapPrefab: {fileID: 8252323424928446531, guid: e718621d8b7f6494da7621b41c982256, type: 3}
+  _nextTrapSpawnTime: 0
+  spawnAreaMin: {x: -15.56, y: -6.4}
+  spawnAreaMax: {x: 1.48, y: 13.9}
+  gizmoColor: {r: 1, g: 0, b: 0.024605155, a: 1}
 --- !u!4 &725058872 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8744915146541290924, guid: 19f074a72b2b2f8488befd95fe352118, type: 3}
@@ -1781,10 +1801,6 @@ PrefabInstance:
     - target: {fileID: 4937739800943794724, guid: 54569fb5dbc4190459af342251722228, type: 3}
       propertyPath: SortKey
       value: 3788092013
-      objectReference: {fileID: 0}
-    - target: {fileID: 4937739800943794724, guid: 54569fb5dbc4190459af342251722228, type: 3}
-      propertyPath: NetworkedBehaviours.Array.size
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6797491551987131108, guid: 54569fb5dbc4190459af342251722228, type: 3}
       propertyPath: m_LocalPosition.x

@@ -6,7 +6,6 @@ public class TrapsManager : NetworkBehaviour
     public float trapSpawnIntervals;
     [SerializeField] GameObject trapPrefab;
     
-    [Networked]
     public float nextTrapSpawnTime { get; set; }
 
     private bool initialized = false;
