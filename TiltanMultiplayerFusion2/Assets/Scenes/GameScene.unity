@@ -1083,7 +1083,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrapsManager
   trapSpawnIntervals: 10
   trapPrefab: {fileID: 8252323424928446531, guid: e718621d8b7f6494da7621b41c982256, type: 3}
-  _nextTrapSpawnTime: 0
   spawnAreaMin: {x: -15.56, y: -6.4}
   spawnAreaMax: {x: 1.48, y: 13.9}
   gizmoColor: {r: 1, g: 0, b: 0.024605155, a: 1}
