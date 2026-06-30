@@ -74,33 +74,43 @@ public class PlayerCharacter : NetworkBehaviour
     public override void FixedUpdateNetwork()
     {
         base.FixedUpdateNetwork();
+        //Without client prediction
         if (Object.HasStateAuthority)
         {
-            Vector3 movementVector = Vector3.zero;
-            Vector3 rotationVector = Vector3.zero;
-            if(Keyboard.current.wKey.isPressed)
-                movementVector += Vector3.forward;
-            if(Keyboard.current.sKey.isPressed)
-                movementVector += Vector3.back;
-            if(Keyboard.current.aKey.isPressed)
-                movementVector += Vector3.left;
-            if(Keyboard.current.dKey.isPressed)
-                movementVector += Vector3.right;
-            if(Keyboard.current.leftArrowKey.isPressed)
-                rotationVector += Vector3.down;
-            if(Keyboard.current.rightArrowKey.isPressed)
-                rotationVector += Vector3.up;
-            
-            transform.Rotate(rotationVector * (rotationSpeed * Runner.DeltaTime));
-            transform.Translate(movementVector * (speed * Runner.DeltaTime));
-
-            if (pressedFire)
+            if (GetInput(out PlayerChracterInputData data))
             {
-                pressedFire = false;
-                SpawnProjectile();
+                Vector3 movementVector = data.movementVector;
+                Vector3 rotationVector = data.rotationVector;
+        
+                transform.Rotate(rotationVector *
+                                 (rotationSpeed * Runner.DeltaTime));
+                transform.Translate(movementVector *
+                                    (speed * Runner.DeltaTime));
+        
+        
+                if (data.firePressed)
+                    SpawnProjectile();
             }
         }
-     }
+
+
+        // if (GetInput(out PlayerChracterInputData data))
+        // {
+        //     Vector3 movementVector = data.movementVector;
+        //     Vector3 rotationVector = data.rotationVector;
+        //
+        //     transform.Rotate(rotationVector *
+        //                      (rotationSpeed * Runner.DeltaTime));
+        //     transform.Translate(movementVector *
+        //                         (speed * Runner.DeltaTime));
+        //
+        //     if (Object.HasStateAuthority)
+        //     {
+        //         if (data.firePressed)
+        //             SpawnProjectile();
+        //     }
+        // }
+    }
 
     void SpawnProjectile()
     {

@@ -40,6 +40,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         Instance = this;
         networkRunnerInstance.AddCallbacks(this);
+        networkRunnerInstance.ProvideInput = true;
 #if LOBBY_MANAGER_UI
         endSessionButton.interactable = false;
         startMatchButton.interactable = false;
@@ -62,10 +63,11 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
         {
             
-            GameMode = GameMode.Shared,
+            GameMode = GameMode.AutoHostOrClient,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
-            AuthValues = new AuthenticationValues(SystemInfo.deviceUniqueIdentifier),
+            
+           // AuthValues = new AuthenticationValues(SystemInfo.deviceUniqueIdentifier),
             SessionProperties = new Dictionary<string, SessionProperty>()
             {
                 {GAME_MODE_KEY, versusModeDropdown.value}
@@ -110,7 +112,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         sendReadyButton.interactable = true;
     //    startMatchButton.interactable = true;
 #endif
-        if(networkRunnerInstance.IsSharedModeMasterClient)
+        if(networkRunnerInstance.IsSharedModeMasterClient || networkRunnerInstance.IsServer)
          networkRunnerInstance.Spawn(readyManagerPrefab);
         // if (networkRunner.IsSharedModeMasterClient)
         //     networkRunner.Spawn(readyManagerGeneric);
@@ -200,13 +202,9 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         
         networkRunnerInstance = Instantiate(networkRunnerPrefab);
         networkRunnerInstance.AddCallbacks(this);
+        networkRunnerInstance.ProvideInput = true;
 
         Debug.Log("New NetworkRunner spawned after shutdown");
-    }
-
-    private void Update()
-    {
-        int a = 10;
     }
 
     #region RunnerCallBacks
@@ -288,6 +286,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             VersusMode sessionVersusMode = (VersusMode)session.Properties[GAME_MODE_KEY].PropertyValue;
             Debug.Log($"Session Versus Mode: {sessionVersusMode}");
         }
+        
     }
 
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)

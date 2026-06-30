@@ -164,6 +164,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -302,7 +303,7 @@ GameObject:
   - component: {fileID: 7063155220218598905}
   - component: {fileID: 5143180834158284107}
   - component: {fileID: 2210815667908513724}
-  - component: {fileID: -6076974763517383449}
+  - component: {fileID: 239420549146930848}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -369,7 +370,7 @@ MonoBehaviour:
   NetworkedBehaviours:
   - {fileID: 1706210447419870186}
   - {fileID: 7063155220218598905}
-  - {fileID: -6076974763517383449}
+  - {fileID: 239420549146930848}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &1706210447419870186
 MonoBehaviour:
@@ -545,10 +546,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6950915495295150835}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -565,7 +566,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-6076974763517383449
+--- !u!114 &239420549146930848
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -574,15 +575,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6950915495295150835}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Script: {fileID: 11500000, guid: dedd6c343f2541dd9d8efa6680711ea4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  Animator: {fileID: 2639827463125215921}
-  ApplyTiming: 2
-  SyncSettings: 79
-  StateHashes: 000000008bf29330b841b607958341e27e40c91f
-  TriggerHashes: 
-  TotalWords: 1
+  m_EditorClassIdentifier: Assembly-CSharp::Managers.InputManager
 --- !u!1001 &11049399764920155
 PrefabInstance:
   m_ObjectHideFlags: 0

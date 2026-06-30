@@ -86,37 +86,30 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
         SceneManager.LoadScene(LOBBY_SCENE_NAME);
     }
-    
-    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer)]
     private void RPCRequestSpawn(RpcInfo info = default)
     {
-        string userId = networkRunner.GetPlayerUserId(info.Source);
-        if(userIdPlayersMap.TryGetValue(userId, out PlayerRef playerRef))
-        {
-           Debug.Log("It's a rejoin!");
-           RPCRequestAllAuthorityBack(info.Source, playerRef);
-           userIdPlayersMap[userId] = info.Source;
-        }
-        else
-        {
-            userIdPlayersMap[userId] = info.Source;
-            int spawnSpawnIndex = 0;
-            SpawnPoint targetSpawnPoint;
-            do
-            {
-                spawnSpawnIndex = Random.Range(0, sixPlayerSpawnPoints.Length);
-                targetSpawnPoint = sixPlayerSpawnPoints[spawnSpawnIndex];
-            } while (targetSpawnPoint.isTaken);
 
-            targetSpawnPoint.isTaken = true;
-            RPCSetSpawnPoint(info.Source, spawnSpawnIndex);
-        }
+        int spawnSpawnIndex = 0;
+        SpawnPoint targetSpawnPoint;
+        do
+        {
+            spawnSpawnIndex = Random.Range(0, sixPlayerSpawnPoints.Length);
+            targetSpawnPoint = sixPlayerSpawnPoints[spawnSpawnIndex];
+        } while (targetSpawnPoint.isTaken);
+
+        targetSpawnPoint.isTaken = true;
+        networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
+            targetSpawnPoint.transform.rotation, info.Source);
+
     }
 
     //
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void RPCSetSpawnPoint([RpcTarget] PlayerRef targetPlayer, int spawnPointIndex)
     {
+        //NOT RELEVANT FOR HOST MODE
         Debug.Log("RPCSetSpawnPoint");
         SpawnPoint targetSpawnPoint = sixPlayerSpawnPoints[spawnPointIndex];
 
