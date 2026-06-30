@@ -70,6 +70,9 @@ namespace Managers
 
         public void OnInput(NetworkRunner runner, NetworkInput input)
         {
+            if(!Object.HasInputAuthority)
+                return;
+            
             PlayerChracterInputData playerChracterInputData = new PlayerChracterInputData();
 
             playerChracterInputData.firePressed = pressedFire;

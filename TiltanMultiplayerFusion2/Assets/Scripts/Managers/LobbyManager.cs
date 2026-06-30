@@ -51,6 +51,10 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         versusModeDropdown.ClearOptions();
         List<string> versusModeOptions = new List<string>(System.Enum.GetNames(typeof(VersusMode)));
         versusModeDropdown.AddOptions(versusModeOptions);
+        
+        #if UNITY_SERVER
+        StartSession();
+        #endif
     }
 
     public async void StartSession()
@@ -63,7 +67,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
         {
             
-            GameMode = GameMode.AutoHostOrClient,
+            GameMode = GameMode.Client,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
             

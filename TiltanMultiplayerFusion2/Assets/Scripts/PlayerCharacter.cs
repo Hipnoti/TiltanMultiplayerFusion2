@@ -75,41 +75,41 @@ public class PlayerCharacter : NetworkBehaviour
     {
         base.FixedUpdateNetwork();
         //Without client prediction
-        if (Object.HasStateAuthority)
-        {
-            if (GetInput(out PlayerChracterInputData data))
-            {
-                Vector3 movementVector = data.movementVector;
-                Vector3 rotationVector = data.rotationVector;
-        
-                transform.Rotate(rotationVector *
-                                 (rotationSpeed * Runner.DeltaTime));
-                transform.Translate(movementVector *
-                                    (speed * Runner.DeltaTime));
-        
-        
-                if (data.firePressed)
-                    SpawnProjectile();
-            }
-        }
-
-
-        // if (GetInput(out PlayerChracterInputData data))
+        // if (Object.HasStateAuthority)
         // {
-        //     Vector3 movementVector = data.movementVector;
-        //     Vector3 rotationVector = data.rotationVector;
-        //
-        //     transform.Rotate(rotationVector *
-        //                      (rotationSpeed * Runner.DeltaTime));
-        //     transform.Translate(movementVector *
-        //                         (speed * Runner.DeltaTime));
-        //
-        //     if (Object.HasStateAuthority)
+        //     if (GetInput(out PlayerChracterInputData data))
         //     {
+        //         Vector3 movementVector = data.movementVector;
+        //         Vector3 rotationVector = data.rotationVector;
+        //
+        //         transform.Rotate(rotationVector *
+        //                          (rotationSpeed * Runner.DeltaTime));
+        //         transform.Translate(movementVector *
+        //                             (speed * Runner.DeltaTime));
+        //
+        //
         //         if (data.firePressed)
         //             SpawnProjectile();
         //     }
         // }
+        if(!Object.HasInputAuthority && !Object.HasStateAuthority)
+            return;
+        if (GetInput(out PlayerChracterInputData data))
+        {
+            Vector3 movementVector = data.movementVector;
+            Vector3 rotationVector = data.rotationVector;
+        
+            transform.Rotate(rotationVector *
+                             (rotationSpeed * Runner.DeltaTime));
+            transform.Translate(movementVector *
+                                (speed * Runner.DeltaTime));
+        
+            if (Object.HasStateAuthority)
+            {
+                if (data.firePressed)
+                    SpawnProjectile();
+            }
+        }
     }
 
     void SpawnProjectile()
