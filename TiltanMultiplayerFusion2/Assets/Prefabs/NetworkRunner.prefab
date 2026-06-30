@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4450419230469511862}
   - component: {fileID: 7946471972512591551}
+  - component: {fileID: 7080941379433635142}
   m_Layer: 0
   m_Name: NetworkRunner
   m_TagString: Untagged
@@ -44,3 +45,18 @@ MonoBehaviour:
   m_Script: {fileID: -1199893898, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7080941379433635142
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 334367574488452761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6080750a33c9d428004642d0e07dd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fusion.Unity::Fusion.Statistics.FusionStatistics
+  _statsEnabled: 27
+  _canvasAnchor: 1
+  _statsCustomConfig: []

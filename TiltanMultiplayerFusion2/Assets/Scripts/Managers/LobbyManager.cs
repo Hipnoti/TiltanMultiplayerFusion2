@@ -36,6 +36,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     public ReadyManager readyManagerInstance;
     private bool isReadyLocal = false;
 
+    [SerializeField] private GameObject spammer;
     private void Start()
     {
         Instance = this;
@@ -61,7 +62,6 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         
        StartGameResult startGameResult = await networkRunnerInstance.StartGame(new StartGameArgs()
         {
-            
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
@@ -109,8 +109,13 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
         sendReadyButton.interactable = true;
     //    startMatchButton.interactable = true;
 #endif
-        if(networkRunnerInstance.IsSharedModeMasterClient)
-         networkRunnerInstance.Spawn(readyManagerPrefab);
+        if (networkRunnerInstance.IsSharedModeMasterClient)
+        {
+            networkRunnerInstance.Spawn(readyManagerPrefab);
+            networkRunnerInstance.Spawn(spammer);
+        }
+
+
         // if (networkRunner.IsSharedModeMasterClient)
         //     networkRunner.Spawn(readyManagerGeneric);
         

@@ -1207,6 +1207,7 @@ MonoBehaviour:
   startMatchButton: {fileID: 1058019500}
   numberOfPlayersText: {fileID: 1857942904}
   readyManagerInstance: {fileID: 0}
+  spammer: {fileID: 9043844309763721535, guid: 546cffe5ca9aff2489449b88f8fc7bf4, type: 3}
 --- !u!1 &642424963
 GameObject:
   m_ObjectHideFlags: 0
