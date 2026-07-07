@@ -67,7 +67,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     public override void Spawned()
     {
         base.Spawned();
-        RPCRequestSpawn();
+        RPCHandshake();
    //     InitializeUserIdMap();
     }
 
@@ -90,7 +90,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     }
     
     [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-    private void RPCRequestSpawn(RpcInfo info = default)
+    private void RPCHandshake(RpcInfo info = default)
     {
         string userId = networkRunner.GetPlayerUserId(info.Source);
         if(userIdPlayersMap.TryGetValue(userId, out PlayerRef oldPlayerRef))
