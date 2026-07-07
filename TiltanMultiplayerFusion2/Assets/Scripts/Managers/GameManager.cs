@@ -103,10 +103,6 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
                playerNetworkIdsMap.Remove(oldPlayerRef);
                playerNetworkIdsMap[info.Source] = networkId;
            }
-           else
-           {
-               RPCRequestAllAuthorityBack(info.Source, oldPlayerRef);
-           }
            
            userIdPlayersMap[userId] = info.Source;
         }
