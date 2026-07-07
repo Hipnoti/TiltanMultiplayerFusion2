@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     public const string LOBBY_SCENE_NAME = "LobbyScene";
     
     private Dictionary<string, PlayerRef> userIdPlayersMap = new Dictionary<string, PlayerRef>();
+    private Dictionary<PlayerRef, NetworkId> playerNetworkIdsMap = new Dictionary<PlayerRef, NetworkId>();
     
     public static GameManager Instance;
     public Camera mainCamera;
@@ -91,10 +93,21 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     private void RPCRequestSpawn(RpcInfo info = default)
     {
         string userId = networkRunner.GetPlayerUserId(info.Source);
-        if(userIdPlayersMap.TryGetValue(userId, out PlayerRef playerRef))
+        if(userIdPlayersMap.TryGetValue(userId, out PlayerRef oldPlayerRef))
         {
            Debug.Log("It's a rejoin!");
-           RPCRequestAllAuthorityBack(info.Source, playerRef);
+           
+           if (playerNetworkIdsMap.TryGetValue(oldPlayerRef, out NetworkId networkId))
+           {
+               RPCRequestAuthorityBack(info.Source, networkId);
+               playerNetworkIdsMap.Remove(oldPlayerRef);
+               playerNetworkIdsMap[info.Source] = networkId;
+           }
+           else
+           {
+               RPCRequestAllAuthorityBack(info.Source, oldPlayerRef);
+           }
+           
            userIdPlayersMap[userId] = info.Source;
         }
         else
@@ -115,14 +128,19 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
 
     //
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    private void RPCSetSpawnPoint([RpcTarget] PlayerRef targetPlayer, int spawnPointIndex)
+    private async void RPCSetSpawnPoint([RpcTarget] PlayerRef targetPlayer, int spawnPointIndex)
     {
         Debug.Log("RPCSetSpawnPoint");
         SpawnPoint targetSpawnPoint = sixPlayerSpawnPoints[spawnPointIndex];
 
         targetSpawnPoint.isTaken = true;
-        networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
+        NetworkObject playerObj = await networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
             targetSpawnPoint.transform.rotation);
+
+        if (playerObj)
+        {
+            RPCReportSpawnedId(playerObj.Id);
+        }
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
@@ -131,6 +149,22 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
         List<NetworkObject> networkObjects = networkRunner.GetAllNetworkObjects();
         networkObjects = networkObjects.Where(o => o.StateAuthority == oldPlayer).ToList();
         foreach (var networkObject in networkObjects)
+        {
+            networkObject.RequestStateAuthority();
+        }
+    }
+
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    private void RPCReportSpawnedId(NetworkId networkId, RpcInfo info = default)
+    {
+        playerNetworkIdsMap[info.Source] = networkId;
+    }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    private void RPCRequestAuthorityBack([RpcTarget] PlayerRef targetPlayer, NetworkId networkId)
+    {
+        NetworkObject networkObject = networkRunner.FindObject(networkId);
+        if (networkObject)
         {
             networkObject.RequestStateAuthority();
         }

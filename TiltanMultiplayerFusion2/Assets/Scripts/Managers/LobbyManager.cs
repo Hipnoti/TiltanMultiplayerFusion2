@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Serialization;
+using Unity.Multiplayer.PlayMode;
 
 
 public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
@@ -62,7 +63,7 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = GameMode.Shared,
             SessionName = "OurGameID",
             OnGameStarted = OnGameStarted,
-            AuthValues = new AuthenticationValues(SystemInfo.deviceUniqueIdentifier),
+            AuthValues = new AuthenticationValues(SystemInfo.deviceUniqueIdentifier + CurrentPlayer.Tags[0]),
             SessionProperties = new Dictionary<string, SessionProperty>()
             {
                 {GAME_MODE_KEY, versusModeDropdown.value}
