@@ -1161,6 +1161,7 @@ GameObject:
   m_Component:
   - component: {fileID: 498870055}
   - component: {fileID: 498870056}
+  - component: {fileID: 498870057}
   m_Layer: 0
   m_Name: LobbyManager
   m_TagString: Untagged
@@ -1207,6 +1208,18 @@ MonoBehaviour:
   startMatchButton: {fileID: 1058019500}
   numberOfPlayersText: {fileID: 1857942904}
   readyManagerInstance: {fileID: 0}
+--- !u!114 &498870057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 498870054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d690fd84f99f4537919a46c7ad034d24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimulationTest
 --- !u!1 &642424963
 GameObject:
   m_ObjectHideFlags: 0
