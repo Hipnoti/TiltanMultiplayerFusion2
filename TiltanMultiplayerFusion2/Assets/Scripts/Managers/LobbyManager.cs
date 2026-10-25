@@ -37,10 +37,7 @@ public class LobbyManager : MonoBehaviour
 
     public async void StartSession()
     {
-#if LOBBY_MANAGER_UI
-        startSessionButton.interactable = false;
-#endif
-        
+
         //1 - Callback method
         networkRunnerInstance.StartGame(new StartGameArgs()
         {
