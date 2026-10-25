@@ -173,6 +173,11 @@ public class GameManager : NetworkBehaviour, INetworkRunnerCallbacks
     {
     }
 
+    public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ReadOnlySpan<byte> data)
+    {
+       
+    }
+
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
     {
     }
