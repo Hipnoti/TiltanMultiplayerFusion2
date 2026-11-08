@@ -74,10 +74,11 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
 #if LOBBY_MANAGER_UI
         endSessionButton.interactable = true;
         sendReadyButton.interactable = true;
-        startMatchButton.interactable = false;
+   //     startMatchButton.interactable = false;
+   startMatchButton.interactable = true;
 #endif
-        if(networkRunnerInstance.IsSharedModeMasterClient)
-         readyManagerInstance = networkRunnerInstance.Spawn(readyManagerPrefab);
+        // if(networkRunnerInstance.IsSharedModeMasterClient)
+        //  readyManagerInstance = networkRunnerInstance.Spawn(readyManagerPrefab);
         
         // foreach (KeyValuePair<string, SessionProperty> sessionProperty in thisNetworkRunner.SessionInfo.Properties)
         // { 
@@ -152,12 +153,6 @@ public class LobbyManager : MonoBehaviour, INetworkRunnerCallbacks
     {
         startMatchButton.interactable = true;
     }
-    
-    private void Update()
-    {
-        int a = 10;
-    }
-
     #region RunnerCallBacks
 
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
