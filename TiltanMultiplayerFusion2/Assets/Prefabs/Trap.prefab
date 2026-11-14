@@ -47,8 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SortKey: 616504525
-  ObjectInterest: 1
-  Flags: 131073
+  SendPriority: 1
+  EnableInterpolation: 1
+  Flags: 131074
   NestedObjects: []
   NetworkedBehaviours: []
   ForceRemoteRenderTimeframe: 0
