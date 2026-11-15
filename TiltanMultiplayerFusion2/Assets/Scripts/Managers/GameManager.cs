@@ -19,7 +19,7 @@ public class GameManager : NetworkBehaviour
     public GameObject playerPrefab;
     public Transform playerSpawnPoint;
 
- //   private NetworkRunner networkRunner;
+    private NetworkRunner networkRunner;
 
     public SpawnPoint[] twoPlayerSpawnPoints;
     public SpawnPoint[] sixPlayerSpawnPoints;
@@ -27,46 +27,41 @@ public class GameManager : NetworkBehaviour
     private void Awake()
     {
         Instance = this;
-        var a = Runner.ActivePlayers;
-        foreach (var playerRef in a)
-        {
-            
-        }
     }
 
-    // private void Start()
-    // {
-    //     
-    //    // networkRunner = NetworkRunner.GetRunnerForScene(SceneManager.GetActiveScene());
-    //   //  Option 1
-    //         //  networkRunner.SpawnAsync(playerPrefab, playerSpawnPoint.position, playerSpawnPoint.rotation);
-    //
-    //     // Option 2
-    //     // SpawnPoint targetSpawnPoint;
-    //     //
-    //     // if (networkRunner.IsSharedModeMasterClient)
-    //     // {
-    //     //     targetSpawnPoint = twoPlayerSpawnPoints[0];
-    //     // }
-    //     // else
-    //     // {
-    //     //     targetSpawnPoint = twoPlayerSpawnPoints[1];
-    //     // }
-    //     //
-    //     // networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
-    //     //     targetSpawnPoint.transform.rotation);
-    //
-    //     //Option 3
-    //     // SpawnPoint targetSpawnPoint;
-    //     // do
-    //     // {
-    //     //     targetSpawnPoint = sixPlayerSpawnPoints[Random.Range(0, sixPlayerSpawnPoints.Length)];
-    //     // } while (targetSpawnPoint.isTaken);
-    //     //
-    //     // targetSpawnPoint.isTaken = true;
-    //     // networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
-    //     //     targetSpawnPoint.transform.rotation);
-    // }
+ //     private void Start()
+ //     {
+ //    //     
+ //   // networkRunner = NetworkRunner.GetRunnerForScene(SceneManager.GetActiveScene());
+ // //    //   //  Option 1
+	// // networkRunner.SpawnAsync(playerPrefab, playerSpawnPoint.position, playerSpawnPoint.rotation);
+ //    //
+ //    // Option 2
+ //    // SpawnPoint targetSpawnPoint;
+ //    //
+ //    // if (networkRunner.IsSharedModeMasterClient)
+ //    // {
+ //    //     targetSpawnPoint = twoPlayerSpawnPoints[0];
+ //    // }
+ //    // else
+ //    // {
+ //    //     targetSpawnPoint = twoPlayerSpawnPoints[1];
+ //    // }
+ //    //
+ //    // networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
+ //    //     targetSpawnPoint.transform.rotation);
+ //    //
+ //    //     //Option 3
+ //    // SpawnPoint targetSpawnPoint;
+ //    // do
+ //    // {
+ //    //     targetSpawnPoint = sixPlayerSpawnPoints[Random.Range(0, sixPlayerSpawnPoints.Length)];
+ //    // } while (targetSpawnPoint.isTaken);
+ //    //
+ //    // targetSpawnPoint.isTaken = true;
+ //    // networkRunner.SpawnAsync(playerPrefab, targetSpawnPoint.transform.position,
+ //    //     targetSpawnPoint.transform.rotation);
+ //      }
 
     public override void Spawned()
     {

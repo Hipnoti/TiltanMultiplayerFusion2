@@ -297,7 +297,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4710094288369997582}
   - component: {fileID: 4724552157481653909}
-  - component: {fileID: 1904511464770702256}
+  - component: {fileID: 3733141529569933197}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -341,9 +341,9 @@ MonoBehaviour:
   Flags: 524546
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 1904511464770702256}
+  - {fileID: 3733141529569933197}
   ForceRemoteRenderTimeframe: 0
---- !u!114 &1904511464770702256
+--- !u!114 &3733141529569933197
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
