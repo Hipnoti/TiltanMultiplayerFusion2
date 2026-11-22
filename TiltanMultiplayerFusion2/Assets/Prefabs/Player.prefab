@@ -341,8 +341,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SortKey: 827666597
-  ObjectInterest: 1
-  Flags: 524289
+  SendPriority: 1
+  EnableInterpolation: 1
+  Flags: 524546
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: 1706210447419870186}
@@ -365,7 +366,31 @@ MonoBehaviour:
   SyncScale: 0
   SyncParent: 0
   _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
+  ConfigFlags: 0
+  PhysicsSettings:
+    ForecastEnabled: 1
+    DebugPhysics: 0
+    GravityForecast: 2
+    MaxExtrapolationTime: 0.15
+    MinLinearDetectedError: 0.02
+    MinAngularDetectedError: 3
+    DeadzoneVelocityMode: 0
+    MaxLinearError: 0
+    MaxAngularError: 0
+    LowCorrectionProgressThreshold: 0.015
+    HighErrorSimilarityThreshold: 1
+    MaxErrorTotalTime: 0.5
+    MaxRemoteSleepIgnoreTime: 0.5
+    ErrorCorrectionType: 0
+    LinearVelCorrectionMul: 1
+    AngularVelCorrectionMul: 1
+    PositionCorrectionLerp: 0.15
+    RotationCorrectionLerp: 0.15
+    Spring: 75
+    Damper: 2
+    MinImpactfulCollisionAlignment: 0.3
+    ImpactStartCorrectionTime: 0.1
+    ImpactCorrectionTimeComplete: 0.3
 --- !u!114 &-7739892247207823958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -492,7 +517,7 @@ MonoBehaviour:
   speed: 10
   projectilePrefab: {fileID: 8864723117260065023, guid: 1a711ff283bb13b45a7bcc8d44d8e910, type: 3}
   projectileSpawnPoint: {fileID: 7443223559792980160}
-  _HP: 100
+  <HP>k__BackingField: 0
 --- !u!136 &5143180834158284107
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -558,7 +583,7 @@ MonoBehaviour:
   Animator: {fileID: 0}
   ApplyTiming: 2
   SyncSettings: 79
-  StateHashes: 000000008bf29330b841b607958341e27e40c91f
+  StateHashes: 000000008bf29330b841b607958341e27e40c91fi
   TriggerHashes: 
   TotalWords: 1
 --- !u!1001 &11049399764920155
