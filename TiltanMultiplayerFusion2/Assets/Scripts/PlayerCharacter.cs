@@ -15,7 +15,8 @@ public class PlayerCharacter : NetworkBehaviour
     [SerializeField] private float rotationSpeed = 30f;
     [SerializeField] float speed = 10f;
     
-    [Networked, OnChangedRender (nameof(HPChanged))] [field: SerializeField]
+    //OnChangedRender (nameof(HPChanged))
+    [Networked, OnChangedRender (nameof(HPChangedEvent))] [field: SerializeField]
     public int HP
     {
         get;
@@ -43,7 +44,7 @@ public class PlayerCharacter : NetworkBehaviour
         if(Object.HasStateAuthority)
         {
             HP -= damage;
-            HPChanged();
+     //       HPChanged();
         }
     }
 
@@ -53,7 +54,7 @@ public class PlayerCharacter : NetworkBehaviour
         HP = MaxHP;
     }
 
-    private void HPChanged()
+    private void HPChangedEvent()
     {
         HP = Mathf.Clamp(HP, 0, MaxHP);
         hpBarImage.fillAmount = HP / (float)MaxHP;
@@ -115,5 +116,11 @@ public class PlayerCharacter : NetworkBehaviour
             transform.Translate(movementVector * (speed * Runner.DeltaTime));
         }
      }
+
+    [ContextMenu("TakeDamage")]
+    void TakeDamageCheat()
+    {
+        TakeDamage(10);
+    }
     
 }

@@ -376,11 +376,8 @@ MonoBehaviour:
   lookAtCamera: {fileID: 7945148573652462854}
   hpBarImage: {fileID: 3834308048804173863}
   MaxHP: 100
-  hitEffectPrefab: {fileID: 3259998007842023770, guid: 08bbdc315a9e8fc42b18d908b0d7155e, type: 3}
   rotationSpeed: 80
   speed: 10
-  projectilePrefab: {fileID: 8864723117260065023, guid: 1a711ff283bb13b45a7bcc8d44d8e910, type: 3}
-  projectileSpawnPoint: {fileID: 7443223559792980160}
   _HP: 100
 --- !u!1001 &11049399764920155
 PrefabInstance:
